@@ -18,6 +18,7 @@
  * @author    Stephan Hoyer <ste.hoyer@gmail.com>
  * @author    André Herrn <info@andre-herrn.de>
  * @author    Anjey Lobas <anjey.lobas@goodahead.com>
+ * @author    Achim Rosenhagen <a.rosenhagen@ffuenf.de>
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @version   $Id:$
  * @since     0.1.0
@@ -31,6 +32,7 @@
  * @author    Stephan Hoyer <ste.hoyer@gmail.com>
  * @author    André Herrn <info@andre-herrn.de>
  * @author    Anjey Lobas <anjey.lobas@goodahead.com>
+ * @author    Achim Rosenhagen <a.rosenhagen@ffuenf.de>
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @version   $Id:$
  * @since     0.1.0
@@ -63,6 +65,11 @@ class Hackathon_MageGitInfo_Model_Git
             return self::GIT_BINARY_NAME;
         }
     }
+    
+    protected function _getRepositoryPath()
+    {
+        return Mage::getStoreConfig('magegitinfo/params/git_repository_path');
+    }
 
     /**
      * Execute Statement
@@ -77,7 +84,7 @@ class Hackathon_MageGitInfo_Model_Git
         $statusCode = null;
         $pipes = array();
 
-        $statement = escapeshellarg($this->_getGitBinary()). ' ' . $statement;
+        $statement = escapeshellarg("cd ". $this->_getRepositoryPath() ." && ". $this->_getGitBinary()). ' ' . $statement;
         Mage::helper("magegitinfo/data")->log($statement);
 
         $process = proc_open($statement, array(
